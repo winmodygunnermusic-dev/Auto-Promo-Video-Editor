@@ -12,6 +12,7 @@ from moviepy.audio.AudioClip import CompositeAudioClip
 from moviepy.audio.io.AudioFileClip import AudioFileClip
 from moviepy.editor import VideoFileClip, concatenate_videoclips
 from moviepy.video.fx import all as vfx
+from moviepy.audio.fx import all as afx
 
 VIDEO_EXTS = {".mp4", ".mov", ".avi", ".mkv", ".wmv", ".m4v"}
 AUDIO_EXTS = {".mp3", ".wav", ".aac", ".m4a", ".ogg"}
@@ -226,7 +227,7 @@ def load_clips(video_folder: str, config: ModeConfig, target_duration: float, lo
 
         if random.random() < config.loop_probability and clip.duration < max_len:
             loop_times = random.choice([2, 3])
-            clip = clip.loop(n=loop_times)
+            clip = clip.fx(vfx.loop, n=loop_times)
             logger(f"Looped clip x{loop_times}")
 
         assembled.append(clip)
@@ -288,7 +289,7 @@ def mix_audio(total_duration: float, music_folder: str, sfx_folder: str, config:
 
     if bg_music.duration < total_duration:
         loops = int(total_duration // bg_music.duration) + 1
-        bg_music = bg_music.audio_loop(duration=total_duration)
+        bg_music = bg_music.fx(afx.audio_loop, duration=total_duration)
         logger(f"Looped music x{loops}")
     else:
         start = random.uniform(0, max(0, bg_music.duration - total_duration))
