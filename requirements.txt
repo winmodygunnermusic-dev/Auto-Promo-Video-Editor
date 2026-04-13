@@ -1,0 +1,9 @@
+moviepy==1.0.1
+numpy
+imageio
+imageio-ffmpeg
+pillow
+proglog
+decorator
+requests
+tqdm
